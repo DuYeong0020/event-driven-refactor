@@ -1,0 +1,8 @@
+spring:
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_SQS_ACCESS_KEY}
+        secret-key: ${AWS_SQS_SECRET_KEY}
+      region:
+        static: ap-northeast-2
