@@ -2,13 +2,20 @@ package com.dudu.gamebounty.domain.verification;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
 
 import java.time.LocalDateTime;
 
+import static com.dudu.gamebounty.common.constant.VerificationCodeConstants.CODE_VALID_SECONDS;
+import static com.dudu.gamebounty.common.constant.VerificationCodeConstants.MAX_ATTEMPT_COUNT;
+
 @Getter
+@RedisHash(value = "verificationCode", timeToLive = CODE_VALID_SECONDS)
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class VerificationCodeEntity {
 
+    @Id
     private String recipient;
     private String code;
 
@@ -16,7 +23,6 @@ public class VerificationCodeEntity {
     private VerificationStatus verificationStatus;
 
     private int attemptCount;
-    private int resendCount;
 
     private LocalDateTime verifiedAt;
 
@@ -26,7 +32,6 @@ public class VerificationCodeEntity {
         this.verificationType = verificationType;
         this.verificationStatus = VerificationStatus.PENDING;
         this.attemptCount = 0;
-        this.resendCount = 0;
     }
 
     public boolean verify(String code) {
@@ -46,6 +51,10 @@ public class VerificationCodeEntity {
     private void verifySuccess() {
         this.verificationStatus = VerificationStatus.VERIFIED;
         this.verifiedAt = LocalDateTime.now();
+    }
+
+    private boolean isAttemptExceeded() {
+        return attemptCount > MAX_ATTEMPT_COUNT;
     }
 
     private void increaseAttempt() {
