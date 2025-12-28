@@ -1,4 +1,8 @@
 spring:
+  profiles:
+    include:
+      - twilio
+      - coolsms
   cloud:
     aws:
       credentials:

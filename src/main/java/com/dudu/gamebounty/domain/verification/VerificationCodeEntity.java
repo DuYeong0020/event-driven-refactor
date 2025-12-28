@@ -21,9 +21,6 @@ public class VerificationCodeEntity {
 
     private VerificationType verificationType;
     private VerificationStatus verificationStatus;
-
-    private int attemptCount;
-
     private LocalDateTime verifiedAt;
 
     public VerificationCodeEntity(String recipient, String code, VerificationType verificationType) {
@@ -31,14 +28,12 @@ public class VerificationCodeEntity {
         this.code = code;
         this.verificationType = verificationType;
         this.verificationStatus = VerificationStatus.PENDING;
-        this.attemptCount = 0;
     }
 
     public boolean verify(String code) {
         if (verificationStatus != VerificationStatus.PENDING) {
             return false;
         }
-        increaseAttempt();
 
         if (!matches(code)) {
             return false;
@@ -53,13 +48,6 @@ public class VerificationCodeEntity {
         this.verifiedAt = LocalDateTime.now();
     }
 
-    private boolean isAttemptExceeded() {
-        return attemptCount > MAX_ATTEMPT_COUNT;
-    }
-
-    private void increaseAttempt() {
-        attemptCount++;
-    }
 
     private boolean matches(String code) {
         return this.code.equals(code);
