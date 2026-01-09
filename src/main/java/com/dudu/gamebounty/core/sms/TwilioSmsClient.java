@@ -3,6 +3,7 @@ package com.dudu.gamebounty.core.sms;
 import com.dudu.gamebounty.common.props.TwilioProperties;
 import com.dudu.gamebounty.domain.sms.SmsBalance;
 import com.dudu.gamebounty.domain.sms.SmsClient;
+import com.dudu.gamebounty.domain.sms.SmsVendor;
 import com.twilio.rest.api.v2010.account.Balance;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
@@ -15,6 +16,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TwilioSmsClient implements SmsClient {
     private final TwilioProperties twilioProperties;
+
+    @Override
+    public SmsVendor vendor() {
+        return SmsVendor.TWILIO;
+    }
 
     @Override
     public void send(String to, String text) {

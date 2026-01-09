@@ -3,6 +3,7 @@ package com.dudu.gamebounty.core.sms;
 import com.dudu.gamebounty.common.props.CoolsmsProperties;
 import com.dudu.gamebounty.domain.sms.SmsBalance;
 import com.dudu.gamebounty.domain.sms.SmsClient;
+import com.dudu.gamebounty.domain.sms.SmsVendor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.nurigo.sdk.message.model.Balance;
@@ -17,6 +18,11 @@ public class CoolSmsClient implements SmsClient {
 
     private final DefaultMessageService messageService;
     private final CoolsmsProperties coolsmsProperties;
+
+    @Override
+    public SmsVendor vendor() {
+        return SmsVendor.COOLSMS;
+    }
 
     @Override
     public void send(String to, String text) {
